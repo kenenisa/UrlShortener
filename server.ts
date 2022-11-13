@@ -73,7 +73,6 @@ async function main() {
     });
 
     // ... you will write your Prisma Client queries here
-    console.log("running query");
 
     // const user = await prisma.user.create({
     //     data: {
