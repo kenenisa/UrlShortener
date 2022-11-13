@@ -6,6 +6,6 @@
         "rootDir": "./",
         "strict": true,
         "noImplicitAny": false,
-        "esModuleInterop": true
+        "esModuleInterop": true,
     }
 }

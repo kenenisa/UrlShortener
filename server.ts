@@ -26,7 +26,8 @@ async function main() {
 
     const app = express();
     const port = process.env.PORT || 8800;
-
+    console.log(process.env.PORT); 
+    
     app.use(session({ secret: process.env.SECRET, resave: false, saveUninitialized: true }));
     app.use(passport.initialize());
     app.use(passport.session());

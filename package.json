@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --clear server.ts --watch",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "tsc && cp -r ./public/ ./dist/public && node dist/server.js"
   },
   "keywords": [],
   "author": "",

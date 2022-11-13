@@ -35,7 +35,8 @@ function makeId(length) {
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const app = (0, express_1.default)();
-        const port = process.env.NODE_PORT || 8800;
+        const port = process.env.PORT || 8800;
+        console.log(process.env.PORT);
         app.use((0, express_session_1.default)({ secret: process.env.SECRET, resave: false, saveUninitialized: true }));
         app.use(passport_1.default.initialize());
         app.use(passport_1.default.session());
@@ -81,7 +82,6 @@ function main() {
             console.log(`UrlShortener is running on port ${port}...`);
         });
         // ... you will write your Prisma Client queries here
-        console.log("running query");
         // const user = await prisma.user.create({
         //     data: {
         //       name: 'Alice',
