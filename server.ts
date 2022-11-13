@@ -25,7 +25,7 @@ function makeId(length) {
 async function main() {
 
     const app = express();
-    const port = process.env.NODE_PORT || 8800;
+    const port = process.env.PORT || 8800;
 
     app.use(session({ secret: process.env.SECRET, resave: false, saveUninitialized: true }));
     app.use(passport.initialize());
