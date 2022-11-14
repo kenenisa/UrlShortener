@@ -10,6 +10,7 @@ dotenv.config();
 import logger from './Middleware/logger';
 //
 import setupGoogleOAuth from './Auth/Google';
+import Chalk from './Middleware/Chalk';
 const prisma = new PrismaClient()
 //
 function makeId(length) {
@@ -21,12 +22,15 @@ function makeId(length) {
     }
     return result;
 }
-
+process.env.FORCE_COLOR = 'true';
 async function main() {
 
     const app = express();
-    const port = process.env.PORT || 8800;
-    console.log(process.env.PORT); 
+    const defaultPORT = 8800;
+    const port = process.env.PORT || defaultPORT;
+    !process.env.PORT && console.log(Chalk('red',`$PORT Not found! Switching to default: ${defaultPORT}`));
+    
+    app.use(logger);
     
     app.use(session({ secret: process.env.SECRET, resave: false, saveUninitialized: true }));
     app.use(passport.initialize());
@@ -65,12 +69,11 @@ async function main() {
         }});
         res.redirect(link?.original || process.env.URL || '');
     })
-    // app.use(logger);
     // set static folder
     app.use(express.static(path.join(__dirname, 'public')))
     app.listen(port, () => {
         setupGoogleOAuth(prisma);
-        console.log(`UrlShortener is running on port ${port}...`);
+        console.log(Chalk(['BgCyan','black'],` 🏁 UrlShortener is running on port ${port}... `));
     });
 
     // ... you will write your Prisma Client queries here
@@ -94,3 +97,5 @@ main()
         await prisma.$disconnect()
         process.exit(1)
     })
+
+
