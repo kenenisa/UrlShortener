@@ -18,14 +18,40 @@
 		<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet"> -->
 		<style>
 			.glow {
-				transition: all 15s;
+				transition: all 10s;
 			}
 			.glow:hover {
-				box-shadow: inset 0 0 20px whitesmoke, inset 10px 0 80px 1px #f000f0e6,
-					inset -10px 0 80px 1px #00f0f0e6, inset 20px 0 50px #f000f01a,
-					inset -20px 0 50px #00f0f01a, 0 0 20px 5px #f0f0f0cc, -5px 0 15px #f000f0e6;
+				box-shadow: inset 0 0 20px whitesmoke, inset 10px 0 80px 1px #f000f0e8,
+					inset -10px 0 80px 1px #00f0f0e8, inset 20px 0 50px #f000f01a,
+					inset -20px 0 50px #00f0f01a, 0 0 20px 5px #f0f0f0cc, -5px 0 15px #f000f0e8;
 				/*10px 0 80px #0ff; */
 			}
+			.box {
+				--border-size: 3px;
+				--border-angle: 0turn;
+				/* width: 60vmin;
+				height: 50vmin; */
+				background-image: conic-gradient(from var(--border-angle), #213, #112 50%, #213),
+					conic-gradient(from var(--border-angle), transparent 20%, #08f, #f03);
+				background-size: calc(100% - var(--border-size) * 2)
+						calc(100% - var(--border-size) * 2),
+					cover;
+				background-position: center center;
+				background-repeat: no-repeat;
+				animation: bg-spin 3s linear infinite;
+			}
+			.glow.box:hover {
+				box-shadow: unset;
+			}
+
+			@keyframes bg-spin {
+				to {
+					--border-angle: 1turn;
+				}
+			}
+			/* .box:hover {
+				animation-play-state: paused;
+			} */
 		</style>
 	</head>
 
@@ -36,7 +62,9 @@
 				id="hi">
 				Hi, There
 			</h1>
-			<div class="glow mx-3 rounded-md">
+			<div
+				class="glow mx-3 rounded-md"
+				id="glow">
 				<div
 					class="px-6 py-10 shadow rounded-md"
 					id="box"
@@ -90,10 +118,13 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="text-center mt-6 m-auto text-gray-500 text-xs">
 				Shorten your long ass links for free until i start charging you for no reason!
 			</div>
-			<div class="text-center mt-6 m-auto text-white text-xs hidden" id="another">
+			<div
+				class="text-center mt-6 m-auto text-white text-xs hidden"
+				id="another">
 				<button id="regenerate">GENERATE ANOTHER LINK</button>
 			</div>
 		</div>
@@ -121,7 +152,7 @@
 			if (window.navigator.platform.toLocaleLowerCase().includes('mac')) {
 				id('c-btn').innerHTML = 'cmd';
 			} else if (window.mobileCheck()) {
-				id('input-self').innerHTML = 'Type or long press to paste...'
+				id('input-self').innerHTML = 'Type or long press to paste...';
 				id('paste').innerHTML = 'Touch to paste';
 				id('box').addEventListener('click', async () => {
 					const i = id('input-self');
@@ -185,12 +216,14 @@
 				id('input').style.display = 'none';
 				id('generated').style.display = 'none';
 				switched = false;
-				id('another').style.display = 'none'
-
+				id('another').style.display = 'none';
 			});
 			id('generate').addEventListener('click', () => {
 				var val = id('input-self').value;
 				if (val !== '' && isValidHttpUrl(val)) {
+					id('glow').classList += ' box'
+					id('generate').disabled = true;
+					id('generate').innerHTML = 'Generating...';
 					fetch(window.location.origin + '/submit/url', {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
@@ -199,6 +232,9 @@
 						.then((e) => e.json())
 						.then((e) => {
 							if (e.slug) {
+								id('generate').disabled = false;
+								id('generate').innerHTML = 'Generate';
+								id('glow').classList = id('glow').className.split(' ').slice(0,-1).join(' ');
 								id('hi').innerHTML = 'Generated';
 								id('initial').style.display = 'none';
 								id('input').style.display = 'none';
@@ -206,7 +242,7 @@
 								id('link').innerHTML = e.slug;
 								id('link').href = e.slug;
 								id('input-self').value = '';
-								id('another').style.display = 'block'
+								id('another').style.display = 'block';
 								window.navigator.clipboard.writeText(e.slug);
 							}
 						});
@@ -215,5 +251,12 @@
 				}
 			});
 		</script>
+		<style>
+			@property --border-angle {
+				syntax: '<angle>';
+				inherits: true;
+				initial-value: 0turn;
+			}
+		</style>
 	</body>
 </html>
