@@ -224,7 +224,7 @@
 					id('glow').classList += ' box'
 					id('generate').disabled = true;
 					id('generate').innerHTML = 'Generating...';
-					fetch(window.location.origin + '/submit/url', {
+					fetch(window.location.origin + '/api/submit/url', {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({ url: val }),

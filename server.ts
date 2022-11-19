@@ -50,7 +50,7 @@ async function main() {
     function slugModify(slug){
         return  process.env.URL +'/'+slug
     }
-    app.post('/submit/url',async (req,res)=>{
+    app.post('/api/submit/url',async (req,res)=>{
         const original = req['body'].url;
         const slug =  makeId(6);
         const link = await prisma.link.create({
